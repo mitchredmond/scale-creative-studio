@@ -57,8 +57,8 @@ const role = settings?.role || 'Creative Director';
 const location = settings?.location || 'Riverton, UT';
 
 // Separate featured and regular projects
-const featuredProjects = displayProjects.filter(p => p.featured);
-const regularProjects = displayProjects.filter(p => !p.featured);
+const featuredProjects = displayProjects?.filter(p => p.featured) || [];
+const regularProjects = displayProjects?.filter(p => !p.featured) || [];
 ---
 
 <BaseLayout>
@@ -91,7 +91,7 @@ const regularProjects = displayProjects.filter(p => !p.featured);
     <div class="container">
       <header class="projects__header">
         <span class="projects__label">Selected Work</span>
-        <span class="projects__count">{displayProjects.length} Projects</span>
+        <span class="projects__count">{displayProjects?.length || 0} Projects</span>
       </header>
       
       <div class="projects__grid" data-stagger="0.1">
