@@ -46,7 +46,7 @@ const imageUrl = thumbnail
     </div>
     <div class="project-card__meta">
       {client && <span>{client}</span>}
-      {tags.length > 0 && !client && <span>{tags[0]}</span>}
+      {tags?.length > 0 && !client && <span>{tags[0]}</span>}
     </div>
   </div>
 </a>
