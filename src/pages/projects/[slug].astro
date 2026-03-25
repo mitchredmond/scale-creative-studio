@@ -94,7 +94,7 @@ const year = p.date ? new Date(p.date).getFullYear() : null;
     {p.images?.length > 0 && (
       <section class="project-images">
         <div class="container">
-          {p.images.map((image) => {
+          {p.images.filter(img => img.asset).map((image) => {
             const imageUrl = urlFor(image)
               .width(1600)
               .format('webp')
