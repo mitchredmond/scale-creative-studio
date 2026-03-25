@@ -90,6 +90,7 @@ export async function getSettings() {
       description,
       name,
       role,
+      location,
       bio,
       photo,
       email,
