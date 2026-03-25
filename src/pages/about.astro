@@ -1,0 +1,60 @@
+---
+/**
+ * About Page
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getSettings, urlFor } from '../lib/sanity';
+
+const settings = await getSettings();
+
+// Fallback for demo
+const name = settings?.name || 'Your Name';
+const role = settings?.role || 'Creative Director';
+const bio = settings?.bio || 'Award-winning creative director with over 15 years of experience leading brand strategy and creative campaigns for global clients. Focused on work that moves people and drives results.';
+const email = settings?.email || 'hello@example.com';
+const socialLinks = settings?.socialLinks || [
+  { platform: 'Instagram', url: 'https://instagram.com' },
+  { platform: 'LinkedIn', url: 'https://linkedin.com' },
+];
+
+const photoUrl = settings?.photo 
+  ? urlFor(settings.photo).width(800).height(1067).format('webp').url()
+  : null;
+---
+
+<BaseLayout title={`About — ${name}`}>
+  <section class="about">
+    <div class="container">
+      <div class="about__grid">
+        <div class="about__photo" data-animate="fade-up">
+          {photoUrl ? (
+            <img src={photoUrl} alt={name} />
+          ) : (
+            <div style="width: 100%; height: 100%; background: var(--color-bg-alt);" />
+          )}
+        </div>
+        
+        <div class="about__content" data-animate="fade-up">
+          <p class="about__name">{role}</p>
+          <h1 class="about__title">{name}</h1>
+          <p class="about__bio">{bio}</p>
+          
+          <div class="about__links">
+            <a href={`mailto:${email}`} class="about__link">Email</a>
+            {socialLinks.map((link) => (
+              <a 
+                href={link.url} 
+                class="about__link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {link.platform}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

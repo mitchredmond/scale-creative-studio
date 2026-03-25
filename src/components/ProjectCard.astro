@@ -1,0 +1,60 @@
+---
+/**
+ * Project Card Component
+ * Displays a project in the grid
+ */
+
+import { urlFor } from '../lib/sanity';
+
+interface Props {
+  title: string;
+  slug: string;
+  thumbnail?: any;
+  client?: string;
+  tags?: string[];
+  featured?: boolean;
+}
+
+const { title, slug, thumbnail, client, tags = [], featured = false } = Astro.props;
+
+// Generate optimized image URL
+const imageUrl = thumbnail 
+  ? urlFor(thumbnail).width(1200).height(750).format('webp').url()
+  : null;
+---
+
+<a 
+  href={`/projects/${slug}`} 
+  class:list={['project-card', { 'project-card--featured': featured }]}
+>
+  <div class="project-card__image-wrapper">
+    {imageUrl ? (
+      <img 
+        src={imageUrl} 
+        alt={title}
+        class="project-card__image"
+        loading="lazy"
+      />
+    ) : (
+      <div class="project-card__placeholder" />
+    )}
+  </div>
+  
+  <div class="project-card__content">
+    <div>
+      <h3 class="project-card__title">{title}</h3>
+    </div>
+    <div class="project-card__meta">
+      {client && <span>{client}</span>}
+      {tags.length > 0 && !client && <span>{tags[0]}</span>}
+    </div>
+  </div>
+</a>
+
+<style>
+  .project-card__placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--color-bg-alt);
+  }
+</style>

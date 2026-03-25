@@ -1,0 +1,121 @@
+---
+/**
+ * Homepage
+ * Hero + Project Grid
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getProjects, getSettings } from '../lib/sanity';
+
+const settings = await getSettings();
+const projects = await getProjects();
+
+// Fallback data for demo (when Sanity isn't connected yet)
+const demoProjects = [
+  {
+    _id: '1',
+    title: 'Brand Campaign',
+    slug: { current: 'brand-campaign' },
+    client: 'Nike',
+    tags: ['Campaign', 'Art Direction'],
+    featured: true,
+    thumbnail: null,
+  },
+  {
+    _id: '2',
+    title: 'Visual Identity',
+    slug: { current: 'visual-identity' },
+    client: 'Spotify',
+    tags: ['Branding'],
+    featured: false,
+    thumbnail: null,
+  },
+  {
+    _id: '3',
+    title: 'Product Launch',
+    slug: { current: 'product-launch' },
+    client: 'Apple',
+    tags: ['Campaign', 'Digital'],
+    featured: false,
+    thumbnail: null,
+  },
+  {
+    _id: '4',
+    title: 'Editorial Design',
+    slug: { current: 'editorial-design' },
+    client: 'Kinfolk',
+    tags: ['Print', 'Editorial'],
+    featured: false,
+    thumbnail: null,
+  },
+];
+
+const displayProjects = projects?.length ? projects : demoProjects;
+const name = settings?.name || 'Your Name';
+const role = settings?.role || 'Creative Director';
+const location = settings?.location || 'New York, NY';
+
+// Separate featured and regular projects
+const featuredProjects = displayProjects.filter(p => p.featured);
+const regularProjects = displayProjects.filter(p => !p.featured);
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero__content">
+        <h1 class="hero__title">{role}</h1>
+        <p class="hero__subtitle">
+          Crafting brands, campaigns, and experiences that resonate.
+        </p>
+        <div class="hero__meta">
+          <div class="hero__meta-item">
+            <span>{name}</span>
+            Based in {location}
+          </div>
+          {settings?.availability === 'available' && (
+            <div class="hero__meta-item">
+              <span>Available</span>
+              For new projects
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="projects">
+    <div class="container">
+      <header class="projects__header">
+        <span class="projects__label">Selected Work</span>
+        <span class="projects__count">{displayProjects.length} Projects</span>
+      </header>
+      
+      <div class="projects__grid" data-stagger="0.1">
+        {featuredProjects.map((project) => (
+          <ProjectCard
+            title={project.title}
+            slug={project.slug.current}
+            thumbnail={project.thumbnail}
+            client={project.client}
+            tags={project.tags}
+            featured={true}
+          />
+        ))}
+        {regularProjects.map((project) => (
+          <ProjectCard
+            title={project.title}
+            slug={project.slug.current}
+            thumbnail={project.thumbnail}
+            client={project.client}
+            tags={project.tags}
+            featured={false}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

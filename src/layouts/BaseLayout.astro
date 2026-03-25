@@ -1,0 +1,77 @@
+---
+/**
+ * Base Layout
+ * Wraps all pages with nav, footer, and animation initialization
+ */
+
+import { getSettings } from '../lib/sanity';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+// Fetch site settings for nav/footer
+const settings = await getSettings();
+const siteName = settings?.name || 'Portfolio';
+const siteTitle = settings?.title || `${siteName} — Creative Director`;
+const siteDescription = settings?.description || 'Creative Director Portfolio';
+
+const { title = siteTitle, description = siteDescription } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+  <body>
+    <nav class="nav">
+      <a href="/" class="nav__logo">{siteName}</a>
+      <ul class="nav__links">
+        <li><a href="/" class="nav__link">Work</a></li>
+        <li><a href="/about" class="nav__link">About</a></li>
+        {settings?.email && (
+          <li><a href={`mailto:${settings.email}`} class="nav__link">Contact</a></li>
+        )}
+      </ul>
+    </nav>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer__content">
+          {settings?.email && (
+            <a href={`mailto:${settings.email}`} class="footer__email">
+              {settings.email}
+            </a>
+          )}
+          <p class="footer__copyright">
+            © {new Date().getFullYear()} {siteName}
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  @import '../styles/global.css';
+</style>
+
+<script>
+  import { initAnimations } from '../scripts/animations.js';
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    initAnimations();
+  });
+</script>

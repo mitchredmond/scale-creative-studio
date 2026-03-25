@@ -1,0 +1,18 @@
+{
+  "name": "portfolio-sanity",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@sanity/client": "^6.15.0",
+    "@sanity/image-url": "^1.0.2",
+    "astro": "^4.0.0",
+    "astro-portabletext": "^0.10.0",
+    "gsap": "^3.12.0",
+    "@studio-freight/lenis": "^1.0.0"
+  }
+}

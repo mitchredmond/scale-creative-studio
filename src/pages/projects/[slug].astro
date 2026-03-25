@@ -1,0 +1,163 @@
+---
+/**
+ * Project Detail Page
+ * Dynamic route: /projects/[slug]
+ */
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProject, getProjectSlugs, urlFor } from '../../lib/sanity';
+import { PortableText } from 'astro-portabletext';
+
+// Generate static paths for all projects
+export async function getStaticPaths() {
+  const slugs = await getProjectSlugs();
+  
+  // Fallback for demo
+  const fallbackSlugs = [
+    { slug: 'brand-campaign' },
+    { slug: 'visual-identity' },
+    { slug: 'product-launch' },
+    { slug: 'editorial-design' },
+  ];
+  
+  const allSlugs = slugs?.length ? slugs : fallbackSlugs;
+  
+  return allSlugs.map(({ slug }) => ({
+    params: { slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const project = await getProject(slug);
+
+// Demo fallback
+const demoProject = {
+  title: 'Project Title',
+  client: 'Client Name',
+  role: 'Creative Director',
+  date: '2024',
+  tags: ['Branding', 'Campaign'],
+  description: 'Project description goes here.',
+  images: [],
+  content: null,
+};
+
+const p = project || demoProject;
+
+// Format date
+const year = p.date ? new Date(p.date).getFullYear() : null;
+---
+
+<BaseLayout title={`${p.title} — Portfolio`}>
+  <article>
+    <!-- Header -->
+    <header class="project-header">
+      <div class="container">
+        <h1 class="project-header__title">{p.title}</h1>
+        
+        {p.description && (
+          <p style="color: var(--color-text-muted); max-width: 600px; margin-bottom: var(--space-md);">
+            {p.description}
+          </p>
+        )}
+        
+        <dl class="project-header__meta">
+          {p.client && (
+            <div>
+              <dt>Client</dt>
+              <dd>{p.client}</dd>
+            </div>
+          )}
+          {p.role && (
+            <div>
+              <dt>Role</dt>
+              <dd>{p.role}</dd>
+            </div>
+          )}
+          {year && (
+            <div>
+              <dt>Year</dt>
+              <dd>{year}</dd>
+            </div>
+          )}
+          {p.tags?.length > 0 && (
+            <div>
+              <dt>Scope</dt>
+              <dd>{p.tags.join(', ')}</dd>
+            </div>
+          )}
+        </dl>
+      </div>
+    </header>
+
+    <!-- Images -->
+    {p.images?.length > 0 && (
+      <section class="project-images">
+        <div class="container">
+          {p.images.map((image) => {
+            const imageUrl = urlFor(image)
+              .width(1600)
+              .format('webp')
+              .url();
+            
+            return (
+              <figure class:list={[
+                'project-images__item',
+                { 'project-images__item--full': image.fullWidth }
+              ]}>
+                <img 
+                  src={imageUrl} 
+                  alt={image.caption || p.title}
+                  loading="lazy"
+                />
+                {image.caption && (
+                  <figcaption style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: var(--space-xs);">
+                    {image.caption}
+                  </figcaption>
+                )}
+              </figure>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
+    <!-- Rich text content -->
+    {p.content && (
+      <section class="project-content">
+        <PortableText value={p.content} />
+      </section>
+    )}
+
+    <!-- Credits -->
+    {p.credits?.length > 0 && (
+      <section style="padding: var(--space-xl) 0; border-top: 1px solid var(--color-border);">
+        <div class="container">
+          <h3 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-muted); margin-bottom: var(--space-md);">
+            Credits
+          </h3>
+          <dl style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md);">
+            {p.credits.map((credit) => (
+              <div>
+                <dt style="font-size: 0.75rem; color: var(--color-text-muted);">{credit.role}</dt>
+                <dd style="font-weight: 500;">{credit.name}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+    )}
+
+    <!-- Back link -->
+    <nav style="padding: var(--space-lg) 0;">
+      <div class="container">
+        <a 
+          href="/" 
+          style="font-size: 0.875rem; color: var(--color-text-muted);"
+        >
+          ← All Projects
+        </a>
+      </div>
+    </nav>
+  </article>
+</BaseLayout>
