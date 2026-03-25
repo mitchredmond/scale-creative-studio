@@ -21,7 +21,7 @@ export const client = createClient({
   apiVersion: '2024-01-01',
   
   // Set to false if you want draft previews (requires token)
-  useCdn: true,
+  useCdn: false,
 });
 
 // Image URL builder for responsive images
