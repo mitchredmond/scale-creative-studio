@@ -51,7 +51,7 @@ const demoProjects = [
   },
 ];
 
-const displayProjects = projects?.length ? projects : demoProjects;
+const displayProjects = Array.isArray(projects) && projects.length > 0 ? projects : demoProjects;
 const name = settings?.name || 'Your Name';
 const role = settings?.role || 'Creative Director';
 const location = settings?.location || 'Riverton, UT';
