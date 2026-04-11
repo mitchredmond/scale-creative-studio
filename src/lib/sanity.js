@@ -1,30 +1,17 @@
 /**
  * Sanity Client Configuration
- * 
- * Replace these values with your Sanity project details:
- * 1. Go to sanity.io/manage
- * 2. Create a new project (or select existing)
- * 3. Copy your Project ID and Dataset name
  */
 
 import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 
 export const client = createClient({
-  // Replace with your project ID from sanity.io/manage
   projectId: 'z0hce1mo',
-  
-  // Usually 'production' — check your Sanity dashboard
   dataset: 'production',
-  
-  // Latest API version
   apiVersion: '2024-01-01',
-  
-  // Set to false if you want draft previews (requires token)
   useCdn: false,
 });
 
-// Image URL builder for responsive images
 const builder = imageUrlBuilder(client);
 
 export function urlFor(source) {
@@ -47,13 +34,32 @@ export async function getProjects() {
       description,
       date,
       thumbnail,
-      tags,
-      featured,
+      category,
+      projectTypes,
       client,
-      role,
-      "imageCount": count(images)
+      role
     }
   `);
+}
+
+/**
+ * Fetch projects by category
+ */
+export async function getProjectsByCategory(category) {
+  return await client.fetch(`
+    *[_type == "project" && category == $category] | order(date desc) {
+      _id,
+      title,
+      slug,
+      description,
+      date,
+      thumbnail,
+      category,
+      projectTypes,
+      client,
+      role
+    }
+  `, { category });
 }
 
 /**
@@ -68,14 +74,13 @@ export async function getProject(slug) {
       description,
       date,
       thumbnail,
-      tags,
-      featured,
+      category,
+      projectTypes,
       client,
       role,
       images,
       content,
-      liveUrl,
-      credits
+      liveUrl
     }
   `, { slug });
 }
@@ -105,5 +110,18 @@ export async function getSettings() {
 export async function getProjectSlugs() {
   return await client.fetch(`
     *[_type == "project"] { "slug": slug.current }
+  `);
+}
+
+/**
+ * Get category counts
+ */
+export async function getCategoryCounts() {
+  return await client.fetch(`
+    {
+      "brands": count(*[_type == "project" && category == "brands"]),
+      "collateral": count(*[_type == "project" && category == "collateral"]),
+      "theRest": count(*[_type == "project" && category == "the-rest"])
+    }
   `);
 }

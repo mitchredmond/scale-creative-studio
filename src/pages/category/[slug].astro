@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getProjectsByCategory } from '../../lib/sanity';
+
+export function getStaticPaths() {
+  return [
+    { params: { slug: 'brands' }, props: { title: 'Brands', category: 'brands' } },
+    { params: { slug: 'collateral' }, props: { title: 'Collateral', category: 'collateral' } },
+    { params: { slug: 'the-rest' }, props: { title: 'The Rest', category: 'the-rest' } },
+  ];
+}
+
+const { slug } = Astro.params;
+const { title, category } = Astro.props;
+
+const projects = await getProjectsByCategory(category) || [];
+
+const categories = [
+  { name: 'Brands', slug: 'brands' },
+  { name: 'Collateral', slug: 'collateral' },
+  { name: 'The Rest', slug: 'the-rest' },
+];
+---
+
+<BaseLayout title={`${title} — George Rivera`}>
+  <div class="category-page">
+    <div class="container">
+      <header class="category-header">
+        <nav class="category-header__nav">
+          {categories.map((cat, i) => (
+            <>
+              <a 
+                href={`/category/${cat.slug}`} 
+                class:list={{ active: cat.slug === slug }}
+              >
+                {cat.name}
+              </a>
+              {i < categories.length - 1 && <span class="separator">|</span>}
+            </>
+          ))}
+        </nav>
+        <h1 class="category-header__title" data-animate>{title}</h1>
+      </header>
+
+      {projects.length > 0 ? (
+        <div class="project-grid" data-stagger>
+          {projects.map((project) => (
+            <ProjectCard
+              title={project.title}
+              slug={project.slug?.current || ''}
+              description={project.description}
+              thumbnail={project.thumbnail}
+              projectTypes={project.projectTypes || []}
+              category={project.category}
+            />
+          ))}
+        </div>
+      ) : (
+        <p style="color: var(--color-text-muted); padding: var(--space-lg) 0;">
+          No projects in this category yet.
+        </p>
+      )}
+    </div>
+  </div>
+</BaseLayout>

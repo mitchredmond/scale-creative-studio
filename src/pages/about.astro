@@ -1,51 +1,45 @@
 ---
-/**
- * About Page
- */
-
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getSettings, urlFor } from '../lib/sanity';
 
 const settings = await getSettings();
 
-// Fallback for demo
-const name = settings?.name || 'Your Name';
+const name = settings?.name || 'George Rivera';
 const role = settings?.role || 'Creative Director';
-const bio = settings?.bio || 'Award-winning creative director with over 15 years of experience leading brand strategy and creative campaigns for global clients. Focused on work that moves people and drives results.';
-const email = settings?.email || 'hello@example.com';
-const socialLinks = settings?.socialLinks || [
-  { platform: 'Instagram', url: 'https://instagram.com' },
-  { platform: 'LinkedIn', url: 'https://linkedin.com' },
-];
+const bio = settings?.bio || '';
+const email = settings?.email || '';
+const socialLinks = settings?.socialLinks || [];
 
-const photoUrl = settings?.photo 
+const photoUrl = settings?.photo?.asset
   ? urlFor(settings.photo).width(800).height(1067).format('webp').url()
   : null;
 ---
 
 <BaseLayout title={`About — ${name}`}>
-  <section class="about">
+  <div class="about-page">
     <div class="container">
-      <div class="about__grid">
-        <div class="about__photo" data-animate="fade-up">
+      <div class="about-content">
+        <div class="about-photo" data-animate>
           {photoUrl ? (
             <img src={photoUrl} alt={name} />
           ) : (
-            <div style="width: 100%; height: 100%; background: var(--color-bg-alt);" />
+            <div style="width: 100%; height: 100%; background: var(--color-bg-alt);"></div>
           )}
         </div>
         
-        <div class="about__content" data-animate="fade-up">
-          <p class="about__name">{role}</p>
-          <h1 class="about__title">{name}</h1>
-          <p class="about__bio">{bio}</p>
+        <div class="about-text">
+          <p class="about-text__label" data-animate>{role}</p>
+          <h1 class="about-text__name" data-animate>{name}</h1>
+          <p class="about-text__bio" data-animate>{bio}</p>
           
-          <div class="about__links">
-            <a href={`mailto:${email}`} class="about__link">Email</a>
+          <div class="about-text__links" data-stagger>
+            {email && (
+              <a href={`mailto:${email}`} class="about-text__link">Email</a>
+            )}
             {socialLinks.map((link) => (
               <a 
                 href={link.url} 
-                class="about__link"
+                class="about-text__link"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -56,5 +50,5 @@ const photoUrl = settings?.photo
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </BaseLayout>

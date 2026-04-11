@@ -1,60 +1,42 @@
 ---
-/**
- * Project Card Component
- * Displays a project in the grid
- */
-
 import { urlFor } from '../lib/sanity';
 
 interface Props {
   title: string;
   slug: string;
+  description?: string;
   thumbnail?: any;
-  client?: string;
-  tags?: string[];
-  featured?: boolean;
+  projectTypes?: string[];
+  category: string;
 }
 
-const { title, slug, thumbnail, client, tags = [], featured = false } = Astro.props;
+const { title, slug, description, thumbnail, projectTypes = [], category } = Astro.props;
 
-// Generate optimized image URL
-const imageUrl = thumbnail 
-  ? urlFor(thumbnail).width(1200).height(750).format('webp').url()
+const imageUrl = thumbnail?.asset
+  ? urlFor(thumbnail).width(800).height(600).format('webp').url()
   : null;
 ---
 
-<a 
-  href={`/projects/${slug}`} 
-  class:list={['project-card', { 'project-card--featured': featured }]}
->
-  <div class="project-card__image-wrapper">
-    {imageUrl ? (
-      <img 
-        src={imageUrl} 
-        alt={title}
-        class="project-card__image"
-        loading="lazy"
-      />
-    ) : (
-      <div class="project-card__placeholder" />
-    )}
-  </div>
+<a href={`/projects/${slug}`} class="project-card">
+  {imageUrl ? (
+    <img src={imageUrl} alt={title} class="project-card__image" loading="lazy" />
+  ) : (
+    <div class="project-card__image" style="background: var(--color-bg-alt);"></div>
+  )}
   
-  <div class="project-card__content">
-    <div>
+  <div class="project-card__overlay">
+    <div class="project-card__content">
       <h3 class="project-card__title">{title}</h3>
-    </div>
-    <div class="project-card__meta">
-      {client && <span>{client}</span>}
-      {tags?.length > 0 && !client && <span>{tags[0]}</span>}
+      {description && (
+        <p class="project-card__description">{description}</p>
+      )}
+      {projectTypes.length > 0 && (
+        <div class="project-card__types">
+          {projectTypes.map((type) => (
+            <span class="project-card__type">{type}</span>
+          ))}
+        </div>
+      )}
     </div>
   </div>
 </a>
-
-<style>
-  .project-card__placeholder {
-    width: 100%;
-    height: 100%;
-    background: var(--color-bg-alt);
-  }
-</style>
