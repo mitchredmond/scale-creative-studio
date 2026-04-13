@@ -1,7 +1,13 @@
 ---
 /**
  * Project Detail Page — Matches George's wireframe
- * Layout: Nav, subcategory tabs (project types), title, description, images with hover captions
+ * 
+ * Layout:
+ * - Nav top left
+ * - Project type tabs: Brand Guide | Collateral (from projectTypes)
+ * - Project title
+ * - Description paragraph
+ * - Images with TEXT OVERLAY ON HOVER (George's request)
  */
 
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -11,7 +17,12 @@ export async function getStaticPaths() {
   const slugs = await getProjectSlugs();
   
   if (!slugs || slugs.length === 0) {
-    return [{ params: { slug: 'placeholder' } }];
+    // Demo project for placeholder
+    return [
+      { params: { slug: 'henry-schein-one' } },
+      { params: { slug: 'fluent-dental' } },
+      { params: { slug: 'millennia' } },
+    ];
   }
   
   return slugs.map(({ slug }) => ({
@@ -22,73 +33,93 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const project = await getProject(slug);
 
-if (!project) {
-  return Astro.redirect('/');
-}
+// Demo content if no project found
+const displayProject = project || {
+  title: 'Henry Schein ONE',
+  category: 'brands',
+  projectTypes: ['Brand Guide', 'Collateral'],
+  description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.',
+  images: [
+    { _key: '1', caption: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.' },
+    { _key: '2', caption: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.' },
+  ],
+};
 
+const projectTypes = displayProject.projectTypes || [];
 const categoryLabels = {
   'brands': 'Brands',
   'collateral': 'Collateral',
   'the-rest': 'The Rest',
 };
-
-const categoryLabel = categoryLabels[project.category] || project.category;
-const projectTypes = project.projectTypes || [];
 ---
 
-<BaseLayout title={`${project.title} — George Rivera`}>
-  <section class="project-page">
-    <!-- Project Type Tabs (if any) -->
+<BaseLayout title={`${displayProject.title} — George Rivera`}>
+  <section class="project">
+    <!-- Project Type Tabs -->
     {projectTypes.length > 0 && (
-      <nav class="project-page__tabs">
+      <nav class="project__tabs">
         {projectTypes.map((type, i) => (
           <>
-            <span class="project-page__tab">{type}</span>
-            {i < projectTypes.length - 1 && <span class="project-page__separator">|</span>}
+            <span class="project__tab">{type}</span>
+            {i < projectTypes.length - 1 && <span class="project__separator">|</span>}
           </>
         ))}
       </nav>
     )}
     
     <!-- Project Title -->
-    <h1 class="project-page__title">{project.title}</h1>
+    <h1 class="project__title">{displayProject.title}</h1>
     
     <!-- Description -->
-    {project.description && (
-      <p class="project-page__description">{project.description}</p>
+    {displayProject.description && (
+      <p class="project__description">{displayProject.description}</p>
     )}
     
-    <!-- Images with hover descriptions -->
-    {project.images?.length > 0 && (
-      <div class="project-page__images">
-        {project.images.filter(img => img.asset).map((image) => {
-          const imageUrl = urlFor(image)
-            .width(1200)
-            .format('webp')
-            .url();
+    <!-- Images with hover text overlay -->
+    <div class="project__images">
+      {displayProject.images?.length > 0 ? (
+        displayProject.images.filter(img => img.asset || img._key).map((image) => {
+          const imageUrl = image.asset
+            ? urlFor(image).width(1000).format('webp').url()
+            : null;
           
           return (
-            <figure class="project-page__image-wrapper">
-              <img 
-                src={imageUrl} 
-                alt={image.caption || project.title}
-                class="project-page__image"
-                loading="lazy"
-              />
+            <figure class="project__image-wrap">
+              {imageUrl ? (
+                <img src={imageUrl} alt={image.caption || displayProject.title} class="project__image" />
+              ) : (
+                <div class="project__image-placeholder"></div>
+              )}
+              {/* Text overlay on hover - George's request */}
               {image.caption && (
-                <figcaption class="project-page__caption">
+                <figcaption class="project__image-caption">
                   {image.caption}
                 </figcaption>
               )}
             </figure>
           );
-        })}
-      </div>
-    )}
+        })
+      ) : (
+        <>
+          <figure class="project__image-wrap">
+            <div class="project__image-placeholder"></div>
+            <figcaption class="project__image-caption">
+              Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.
+            </figcaption>
+          </figure>
+          <figure class="project__image-wrap">
+            <div class="project__image-placeholder"></div>
+            <figcaption class="project__image-caption">
+              Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+            </figcaption>
+          </figure>
+        </>
+      )}
+    </div>
     
     <!-- Back link -->
-    <a href={`/category/${project.category}`} class="project-page__back">
-      ← Back to {categoryLabel}
+    <a href={`/category/${displayProject.category || 'brands'}`} class="project__back">
+      ← Back to {categoryLabels[displayProject.category] || 'Work'}
     </a>
   </section>
 </BaseLayout>

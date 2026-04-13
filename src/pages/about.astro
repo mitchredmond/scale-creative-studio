@@ -1,8 +1,4 @@
 ---
-/**
- * About Page
- */
-
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getSettings, urlFor } from '../lib/sanity';
 
@@ -10,39 +6,39 @@ const settings = await getSettings();
 
 const name = settings?.name || 'George Rivera';
 const role = settings?.role || 'Creative Director';
-const bio = settings?.bio || '';
+const bio = settings?.bio || 'Award-winning Creative Director with experience in branding, campaigns, and digital experiences.';
 const email = settings?.email || '';
 const socialLinks = settings?.socialLinks || [];
 
 const photoUrl = settings?.photo?.asset
-  ? urlFor(settings.photo).width(600).height(750).format('webp').url()
+  ? urlFor(settings.photo).width(500).height(625).format('webp').url()
   : null;
 ---
 
 <BaseLayout title={`About — ${name}`}>
-  <section class="about-page">
-    <div class="about-page__content">
-      <div class="about-page__photo">
+  <section class="about">
+    <div class="about__content">
+      <div class="about__photo">
         {photoUrl ? (
           <img src={photoUrl} alt={name} />
         ) : (
-          <div class="about-page__photo-placeholder"></div>
+          <div class="about__photo-placeholder"></div>
         )}
       </div>
       
-      <div class="about-page__text">
-        <p class="about-page__role">{role}</p>
-        <h1 class="about-page__name">{name}</h1>
-        <p class="about-page__bio">{bio}</p>
+      <div class="about__text">
+        <p class="about__role">{role}</p>
+        <h1 class="about__name">{name}</h1>
+        <p class="about__bio">{bio}</p>
         
-        <div class="about-page__links">
+        <div class="about__links">
           {email && (
-            <a href={`mailto:${email}`} class="about-page__link">Email</a>
+            <a href={`mailto:${email}`} class="about__link">Email</a>
           )}
           {socialLinks.map((link) => (
             <a 
               href={link.url} 
-              class="about-page__link"
+              class="about__link"
               target="_blank"
               rel="noopener noreferrer"
             >

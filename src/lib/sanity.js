@@ -82,7 +82,7 @@ export async function getProject(slug) {
 }
 
 /**
- * Fetch site settings
+ * Fetch site settings (includes heroImage)
  */
 export async function getSettings() {
   return await client.fetch(`
@@ -95,7 +95,8 @@ export async function getSettings() {
       bio,
       photo,
       email,
-      socialLinks
+      socialLinks,
+      heroImage
     }
   `);
 }

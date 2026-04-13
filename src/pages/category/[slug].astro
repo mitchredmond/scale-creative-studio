@@ -1,12 +1,17 @@
 ---
 /**
  * Category Page — Matches George's wireframe
- * Layout: Nav, tagline, category tabs, section title, project grid
+ * 
+ * Layout:
+ * - Nav top left
+ * - Tagline (smaller)
+ * - Category tabs: BRANDS | COLLATERAL | THE REST
+ * - Section title (e.g., "Brand Work")
+ * - Projects in a row with titles below thumbnails
  */
 
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ProjectCard from '../../components/ProjectCard.astro';
-import { getProjectsByCategory, getSettings } from '../../lib/sanity';
+import { getProjectsByCategory, urlFor } from '../../lib/sanity';
 
 export function getStaticPaths() {
   return [
@@ -19,58 +24,74 @@ export function getStaticPaths() {
 const { slug } = Astro.params;
 const { title, category } = Astro.props;
 
-const settings = await getSettings();
 const projects = await getProjectsByCategory(category) || [];
-const name = settings?.name || 'George Rivera';
+
+// Demo projects if none exist
+const displayProjects = projects.length > 0 ? projects : [
+  { _id: '1', title: 'Henry Schein ONE', slug: { current: 'henry-schein-one' }, thumbnail: null, description: 'Brand identity and guidelines for Henry Schein ONE dental software.' },
+  { _id: '2', title: 'Fluent Dental', slug: { current: 'fluent-dental' }, thumbnail: null, description: 'Complete brand system for Fluent Dental practice management.' },
+  { _id: '3', title: 'Millennia', slug: { current: 'millennia' }, thumbnail: null, description: 'Visual identity for Millennia healthcare solutions.' },
+];
 
 const categories = [
-  { name: 'Brands', slug: 'brands' },
-  { name: 'Collateral', slug: 'collateral' },
-  { name: 'The Rest', slug: 'the-rest' },
+  { name: 'BRANDS', slug: 'brands' },
+  { name: 'COLLATERAL', slug: 'collateral' },
+  { name: 'THE REST', slug: 'the-rest' },
 ];
 ---
 
-<BaseLayout title={`${title} — ${name}`}>
-  <section class="category-page">
+<BaseLayout title={`${title} — George Rivera`}>
+  <section class="category">
     <!-- Tagline -->
-    <h1 class="category-page__tagline">
-      Building, Expanding,<br />and Fulfilling Brands
+    <h1 class="category__tagline">
+      Building, Expanding, and Fulfilling Brands
     </h1>
     
     <!-- Category Tabs -->
-    <nav class="category-page__tabs">
+    <nav class="category__tabs">
       {categories.map((cat, i) => (
         <>
           <a 
             href={`/category/${cat.slug}`} 
-            class:list={['category-page__tab', { 'is-active': cat.slug === slug }]}
+            class:list={['category__tab', { 'is-active': cat.slug === slug }]}
           >
-            {cat.name.toUpperCase()}
+            {cat.name}
           </a>
-          {i < categories.length - 1 && <span class="category-page__separator">|</span>}
+          {i < categories.length - 1 && <span class="category__separator">|</span>}
         </>
       ))}
     </nav>
     
     <!-- Section Title -->
-    <h2 class="category-page__title">{title}</h2>
+    <h2 class="category__title">{title}</h2>
+    <p class="category__subtitle">One for each Category</p>
     
-    <!-- Project Grid -->
-    {projects.length > 0 ? (
-      <div class="category-page__grid">
-        {projects.map((project) => (
-          <ProjectCard
-            title={project.title}
-            slug={project.slug?.current || ''}
-            description={project.description}
-            thumbnail={project.thumbnail}
-            projectTypes={project.projectTypes || []}
-            category={project.category}
-          />
-        ))}
-      </div>
-    ) : (
-      <p class="category-page__empty">No projects in this category yet.</p>
-    )}
+    <!-- Projects Row -->
+    <div class="category__projects">
+      {displayProjects.map((project) => {
+        const imageUrl = project.thumbnail?.asset
+          ? urlFor(project.thumbnail).width(400).height(300).format('webp').url()
+          : null;
+        
+        return (
+          <a href={`/projects/${project.slug?.current || project._id}`} class="project-thumb">
+            <div class="project-thumb__image-wrap">
+              {imageUrl ? (
+                <img src={imageUrl} alt={project.title} class="project-thumb__image" />
+              ) : (
+                <div class="project-thumb__placeholder"></div>
+              )}
+              <!-- Hover overlay with description -->
+              {project.description && (
+                <div class="project-thumb__overlay">
+                  <p class="project-thumb__description">{project.description}</p>
+                </div>
+              )}
+            </div>
+            <h3 class="project-thumb__title">{project.title}</h3>
+          </a>
+        );
+      })}
+    </div>
   </section>
 </BaseLayout>

@@ -1,33 +1,17 @@
 /* ==========================================================================
-   George Rivera Portfolio — Matching Wireframe Layout
-   Font: Red Hat Display (matches PDF)
+   George Rivera Portfolio — Matching Wireframe Layout Exactly
    ========================================================================== */
 
 :root {
-  /* Colors */
   --color-bg: #ffffff;
   --color-text: #1a1a1a;
   --color-text-light: #666666;
-  --color-border: #e0e0e0;
-  
-  /* Typography */
+  --color-placeholder: #e5e5e5;
   --font-main: 'Red Hat Display', -apple-system, BlinkMacSystemFont, sans-serif;
-  
-  /* Spacing */
-  --space-sm: 1rem;
-  --space-md: 2rem;
-  --space-lg: 4rem;
-  --space-xl: 6rem;
-  
-  /* Transitions */
   --ease: cubic-bezier(0.25, 1, 0.5, 1);
-  --duration: 0.3s;
 }
 
-/* ==========================================================================
-   Reset
-   ========================================================================== */
-
+/* Reset */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -42,7 +26,7 @@ html {
 body {
   font-family: var(--font-main);
   font-weight: 300;
-  line-height: 1.6;
+  line-height: 1.5;
   color: var(--color-text);
   background: var(--color-bg);
 }
@@ -59,438 +43,444 @@ img {
 }
 
 /* ==========================================================================
-   Navigation — Top right, matches wireframe
+   Navigation — Top Left (per wireframe)
    ========================================================================== */
 
 .nav {
   position: fixed;
   top: 0;
-  right: 0;
-  padding: var(--space-md);
+  left: 0;
+  padding: 2rem;
   display: flex;
-  gap: var(--space-md);
+  gap: 2rem;
   z-index: 100;
 }
 
 .nav__link {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 400;
-  color: var(--color-text-light);
-  transition: color var(--duration) var(--ease);
+  color: var(--color-text);
+  transition: opacity 0.2s var(--ease);
 }
 
 .nav__link:hover {
-  color: var(--color-text);
+  opacity: 0.5;
 }
 
 /* ==========================================================================
-   Home Page — Centered layout per wireframe
+   HOME PAGE — Matches wireframe exactly
+   
+   Layout:
+   - Tagline centered
+   - George Rivera | BRANDS COLLATERAL THE REST (inline below)
+   - Large hero image
    ========================================================================== */
 
 .home {
   min-height: 100vh;
+  padding: 8rem 2rem 4rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  text-align: center;
-  padding: var(--space-xl) var(--space-md);
 }
 
 .home__tagline {
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
   font-weight: 300;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  margin-bottom: var(--space-lg);
+  text-align: center;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.5rem;
+}
+
+.home__meta {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
 }
 
 .home__name {
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 400;
-  color: var(--color-text-light);
-  margin-bottom: var(--space-xl);
+  color: var(--color-text);
 }
 
 .home__categories {
   display: flex;
-  align-items: center;
-  gap: var(--space-sm);
+  gap: 1.5rem;
 }
 
 .home__category-link {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   color: var(--color-text);
-  padding: 0.5rem 0;
-  position: relative;
-  transition: opacity var(--duration) var(--ease);
-}
-
-.home__category-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: var(--color-text);
-  transform: scaleX(0);
-  transition: transform var(--duration) var(--ease);
+  transition: opacity 0.2s var(--ease);
 }
 
 .home__category-link:hover {
-  opacity: 0.7;
+  opacity: 0.5;
 }
 
-.home__category-link:hover::after {
-  transform: scaleX(1);
+/* Hero Image — Large gray box from wireframe */
+.home__hero {
+  width: 100%;
+  max-width: 1200px;
 }
 
-.home__separator {
+.home__hero-image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+
+.home__hero-placeholder {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: var(--color-placeholder);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home__hero-placeholder span {
+  font-size: 0.875rem;
   color: var(--color-text-light);
-  font-weight: 300;
 }
 
 /* ==========================================================================
-   Category Page — Matches wireframe structure
+   CATEGORY PAGE — Matches wireframe
+   
+   Layout:
+   - Tagline
+   - BRANDS | COLLATERAL | THE REST tabs
+   - Section title (e.g., "Brand Work")
+   - Projects in horizontal row with titles below
    ========================================================================== */
 
-.category-page {
+.category {
   min-height: 100vh;
-  padding: var(--space-xl) var(--space-md);
+  padding: 8rem 2rem 4rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
 }
 
-.category-page__tagline {
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
+.category__tagline {
+  font-size: clamp(1.5rem, 3.5vw, 2.25rem);
   font-weight: 300;
-  line-height: 1.2;
-  margin-bottom: var(--space-lg);
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
-.category-page__tabs {
+.category__tabs {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-lg);
+  gap: 1rem;
+  margin-bottom: 3rem;
 }
 
-.category-page__tab {
+.category__tab {
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   color: var(--color-text-light);
-  padding: 0.5rem 0;
-  transition: color var(--duration) var(--ease);
+  transition: color 0.2s var(--ease);
 }
 
-.category-page__tab:hover,
-.category-page__tab.is-active {
+.category__tab:hover,
+.category__tab.is-active {
   color: var(--color-text);
 }
 
-.category-page__separator {
-  color: var(--color-border);
+.category__separator {
+  color: var(--color-text-light);
   font-weight: 300;
 }
 
-.category-page__title {
-  font-size: 1.25rem;
+.category__title {
+  font-size: 1.125rem;
   font-weight: 400;
-  margin-bottom: var(--space-lg);
-  color: var(--color-text-light);
+  margin-bottom: 0.5rem;
 }
 
-.category-page__grid {
+.category__subtitle {
+  font-size: 0.8125rem;
+  color: var(--color-text-light);
+  margin-bottom: 3rem;
+}
+
+/* Projects row — horizontal per wireframe */
+.category__projects {
   display: flex;
   justify-content: center;
-  gap: var(--space-lg);
+  gap: 3rem;
   flex-wrap: wrap;
   max-width: 1200px;
 }
 
-.category-page__empty {
-  color: var(--color-text-light);
-}
-
-/* ==========================================================================
-   Project Card — With hover description popup
-   ========================================================================== */
-
-.project-card {
+/* Project thumbnail card */
+.project-thumb {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
   width: 280px;
 }
 
-.project-card__image-container {
+.project-thumb__image-wrap {
   position: relative;
   width: 100%;
   aspect-ratio: 4/3;
-  background: #f5f5f5;
-  border-radius: 4px;
+  background: var(--color-placeholder);
+  margin-bottom: 1rem;
   overflow: hidden;
-  margin-bottom: var(--space-sm);
 }
 
-.project-card__image {
+.project-thumb__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s var(--ease);
+  transition: transform 0.4s var(--ease);
 }
 
-.project-card:hover .project-card__image {
+.project-thumb:hover .project-thumb__image {
   transform: scale(1.03);
 }
 
-.project-card__placeholder {
+.project-thumb__placeholder {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+  background: var(--color-placeholder);
 }
 
-/* Hover popup — George's request */
-.project-card__popup {
+/* HOVER OVERLAY — Text appears on hover (George's request) */
+.project-thumb__overlay {
   position: absolute;
-  bottom: var(--space-sm);
-  left: var(--space-sm);
-  right: var(--space-sm);
-  background: white;
-  padding: var(--space-sm);
-  border-radius: 4px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  inset: 0;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity var(--duration) var(--ease),
-              transform var(--duration) var(--ease);
-  pointer-events: none;
+  transition: opacity 0.3s var(--ease);
 }
 
-.project-card:hover .project-card__popup {
+.project-thumb:hover .project-thumb__overlay {
   opacity: 1;
-  transform: translateY(0);
 }
 
-.project-card__popup-text {
+.project-thumb__description {
   font-size: 0.8125rem;
-  line-height: 1.5;
+  line-height: 1.6;
   color: var(--color-text);
   text-align: left;
 }
 
-.project-card__title {
+.project-thumb__title {
   font-size: 0.9375rem;
   font-weight: 400;
+  text-align: center;
 }
 
 /* ==========================================================================
-   Project Page
+   PROJECT DETAIL PAGE — Matches wireframe
+   
+   Layout:
+   - Tabs: Brand Guide | Collateral
+   - Project title
+   - Description paragraph
+   - Images with TEXT ON HOVER
    ========================================================================== */
 
-.project-page {
+.project {
   max-width: 900px;
   margin: 0 auto;
-  padding: var(--space-xl) var(--space-md);
+  padding: 8rem 2rem 4rem;
 }
 
-.project-page__tabs {
+.project__tabs {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-md);
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
-.project-page__tab {
-  font-size: 0.75rem;
+.project__tab {
+  font-size: 0.8125rem;
   font-weight: 500;
-  letter-spacing: 0.05em;
+  color: var(--color-text);
+}
+
+.project__separator {
   color: var(--color-text-light);
 }
 
-.project-page__separator {
-  color: var(--color-border);
-}
-
-.project-page__title {
+.project__title {
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 300;
-  margin-bottom: var(--space-md);
+  margin-bottom: 1.5rem;
 }
 
-.project-page__description {
+.project__description {
   font-size: 1rem;
   line-height: 1.7;
-  color: var(--color-text-light);
-  max-width: 600px;
-  margin-bottom: var(--space-lg);
+  color: var(--color-text);
+  max-width: 700px;
+  margin-bottom: 3rem;
 }
 
-.project-page__images {
+/* Project images */
+.project__images {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
-  margin-bottom: var(--space-lg);
+  gap: 2rem;
+  margin-bottom: 3rem;
 }
 
-.project-page__image-wrapper {
+.project__image-wrap {
   position: relative;
-  border-radius: 4px;
+  width: 100%;
   overflow: hidden;
 }
 
-.project-page__image {
+.project__image {
   width: 100%;
   height: auto;
 }
 
-/* Image caption on hover */
-.project-page__caption {
+.project__image-placeholder {
+  width: 100%;
+  aspect-ratio: 16/10;
+  background: var(--color-placeholder);
+}
+
+/* TEXT OVERLAY ON HOVER — George's request:
+   "Is there a way to have the descriptions pop-up on rollover?" */
+.project__image-caption {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-  color: white;
-  padding: var(--space-lg) var(--space-md) var(--space-md);
-  font-size: 0.875rem;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.92);
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--color-text);
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity var(--duration) var(--ease),
-              transform var(--duration) var(--ease);
+  transition: opacity 0.3s var(--ease);
 }
 
-.project-page__image-wrapper:hover .project-page__caption {
+.project__image-wrap:hover .project__image-caption {
   opacity: 1;
-  transform: translateY(0);
 }
 
-.project-page__back {
+.project__back {
   font-size: 0.875rem;
   color: var(--color-text-light);
-  transition: color var(--duration) var(--ease);
+  transition: color 0.2s var(--ease);
 }
 
-.project-page__back:hover {
+.project__back:hover {
   color: var(--color-text);
 }
 
 /* ==========================================================================
-   About Page
+   ABOUT PAGE
    ========================================================================== */
 
-.about-page {
+.about {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-xl) var(--space-md);
+  padding: 8rem 2rem 4rem;
 }
 
-.about-page__content {
+.about__content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-xl);
+  gap: 4rem;
   max-width: 1000px;
   align-items: center;
 }
 
 @media (max-width: 768px) {
-  .about-page__content {
+  .about__content {
     grid-template-columns: 1fr;
     text-align: center;
   }
 }
 
-.about-page__photo {
+.about__photo {
   aspect-ratio: 4/5;
-  background: #f5f5f5;
-  border-radius: 4px;
+  background: var(--color-placeholder);
   overflow: hidden;
 }
 
-.about-page__photo img {
+.about__photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.about-page__photo-placeholder {
+.about__photo-placeholder {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+  background: var(--color-placeholder);
 }
 
-.about-page__role {
+.about__role {
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-text-light);
-  margin-bottom: var(--space-sm);
+  margin-bottom: 0.75rem;
 }
 
-.about-page__name {
-  font-size: clamp(2rem, 4vw, 3rem);
+.about__name {
+  font-size: clamp(2rem, 4vw, 2.5rem);
   font-weight: 300;
-  margin-bottom: var(--space-md);
+  margin-bottom: 1.5rem;
 }
 
-.about-page__bio {
+.about__bio {
   color: var(--color-text-light);
   line-height: 1.7;
-  margin-bottom: var(--space-lg);
+  margin-bottom: 2rem;
 }
 
-.about-page__links {
+.about__links {
   display: flex;
-  gap: var(--space-md);
+  gap: 1.5rem;
 }
 
 @media (max-width: 768px) {
-  .about-page__links {
+  .about__links {
     justify-content: center;
   }
 }
 
-.about-page__link {
+.about__link {
   font-size: 0.875rem;
   color: var(--color-text-light);
-  transition: color var(--duration) var(--ease);
+  transition: color 0.2s var(--ease);
 }
 
-.about-page__link:hover {
+.about__link:hover {
   color: var(--color-text);
 }
 
 /* ==========================================================================
-   Footer
-   ========================================================================== */
-
-.footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  padding: var(--space-md);
-  font-size: 0.75rem;
-  color: var(--color-text-light);
-}
-
-/* ==========================================================================
-   Page Transitions & Animations
+   Animations
    ========================================================================== */
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(15px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -499,33 +489,34 @@ img {
 }
 
 .home__tagline,
-.home__name,
-.home__categories,
-.category-page__tagline,
-.category-page__tabs,
-.category-page__title,
-.category-page__grid,
-.project-page__title,
-.project-page__description,
-.about-page__content {
-  animation: fadeIn 0.6s var(--ease) both;
-}
-
-.home__name { animation-delay: 0.1s; }
-.home__categories { animation-delay: 0.2s; }
-.category-page__tabs { animation-delay: 0.1s; }
-.category-page__title { animation-delay: 0.15s; }
-.category-page__grid { animation-delay: 0.2s; }
-.project-page__description { animation-delay: 0.1s; }
-
-/* Staggered card animations */
-.category-page__grid .project-card:nth-child(1) { animation-delay: 0.25s; }
-.category-page__grid .project-card:nth-child(2) { animation-delay: 0.3s; }
-.category-page__grid .project-card:nth-child(3) { animation-delay: 0.35s; }
-.category-page__grid .project-card:nth-child(4) { animation-delay: 0.4s; }
-.category-page__grid .project-card:nth-child(5) { animation-delay: 0.45s; }
-.category-page__grid .project-card:nth-child(6) { animation-delay: 0.5s; }
-
-.category-page__grid .project-card {
+.home__meta,
+.home__hero,
+.category__tagline,
+.category__tabs,
+.category__title,
+.category__projects,
+.project__title,
+.project__description,
+.project__images,
+.about__content {
   animation: fadeIn 0.5s var(--ease) both;
 }
+
+.home__meta { animation-delay: 0.05s; }
+.home__hero { animation-delay: 0.1s; }
+.category__tabs { animation-delay: 0.05s; }
+.category__title { animation-delay: 0.1s; }
+.category__projects { animation-delay: 0.15s; }
+.project__description { animation-delay: 0.05s; }
+.project__images { animation-delay: 0.1s; }
+
+/* Stagger project cards */
+.category__projects .project-thumb {
+  animation: fadeIn 0.4s var(--ease) both;
+}
+.category__projects .project-thumb:nth-child(1) { animation-delay: 0.15s; }
+.category__projects .project-thumb:nth-child(2) { animation-delay: 0.2s; }
+.category__projects .project-thumb:nth-child(3) { animation-delay: 0.25s; }
+.category__projects .project-thumb:nth-child(4) { animation-delay: 0.3s; }
+.category__projects .project-thumb:nth-child(5) { animation-delay: 0.35s; }
+.category__projects .project-thumb:nth-child(6) { animation-delay: 0.4s; }

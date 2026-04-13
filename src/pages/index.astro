@@ -1,41 +1,60 @@
 ---
 /**
- * Homepage — Matches George's wireframe exactly
- * Layout: Nav top, tagline center, name below, categories at bottom
+ * Homepage — Matches George's wireframe EXACTLY
+ * 
+ * Layout:
+ * - Nav top left: Work About Contact
+ * - Center: Tagline
+ * - Below: George Rivera | BRANDS COLLATERAL THE REST (inline)
+ * - Large hero image (editable in Sanity)
  */
 
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getSettings, getCategoryCounts } from '../lib/sanity';
+import { getSettings, getCategoryCounts, urlFor } from '../lib/sanity';
 
 const settings = await getSettings();
 const counts = await getCategoryCounts() || { brands: 0, collateral: 0, theRest: 0 };
 
 const name = settings?.name || 'George Rivera';
+const heroImage = settings?.heroImage?.asset 
+  ? urlFor(settings.heroImage).width(1400).height(800).format('webp').url()
+  : null;
 
 const categories = [
-  { name: 'Brands', slug: 'brands', count: counts.brands || 0 },
-  { name: 'Collateral', slug: 'collateral', count: counts.collateral || 0 },
-  { name: 'The Rest', slug: 'the-rest', count: counts.theRest || 0 },
+  { name: 'BRANDS', slug: 'brands' },
+  { name: 'COLLATERAL', slug: 'collateral' },
+  { name: 'THE REST', slug: 'the-rest' },
 ];
 ---
 
 <BaseLayout>
   <section class="home">
+    <!-- Tagline centered -->
     <h1 class="home__tagline">
-      Building, Expanding,<br />and Fulfilling Brands
+      Building, Expanding, and Fulfilling Brands
     </h1>
     
-    <p class="home__name">{name}</p>
-    
-    <nav class="home__categories">
-      {categories.map((cat, i) => (
-        <>
+    <!-- Name + Categories inline -->
+    <div class="home__meta">
+      <span class="home__name">{name}</span>
+      <nav class="home__categories">
+        {categories.map((cat) => (
           <a href={`/category/${cat.slug}`} class="home__category-link">
-            {cat.name.toUpperCase()}
+            {cat.name}
           </a>
-          {i < categories.length - 1 && <span class="home__separator">|</span>}
-        </>
-      ))}
-    </nav>
+        ))}
+      </nav>
+    </div>
+    
+    <!-- Hero Image (editable in Sanity) -->
+    <div class="home__hero">
+      {heroImage ? (
+        <img src={heroImage} alt="Featured work" class="home__hero-image" />
+      ) : (
+        <div class="home__hero-placeholder">
+          <span>Hero Image</span>
+        </div>
+      )}
+    </div>
   </section>
 </BaseLayout>
