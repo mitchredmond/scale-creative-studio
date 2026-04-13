@@ -1,5 +1,9 @@
 /**
- * Project Schema — Updated with Categories
+ * Project Schema — With Categories for George's structure
+ * 
+ * INSTRUCTIONS:
+ * Replace your existing schemaTypes/project.js in Sanity Studio with this file,
+ * then run: npx sanity deploy
  */
 
 export default {
@@ -38,6 +42,23 @@ export default {
       validation: Rule => Rule.required(),
     },
     {
+      name: 'projectTypes',
+      title: 'Project Types',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        layout: 'tags',
+      },
+      description: 'e.g., Brand Guide, Collateral, Digital, Print',
+    },
+    {
+      name: 'description',
+      title: 'Short Description',
+      type: 'text',
+      rows: 3,
+      description: 'Shows on hover in the project grid',
+    },
+    {
       name: 'date',
       title: 'Date',
       type: 'date',
@@ -53,29 +74,12 @@ export default {
       type: 'string',
     },
     {
-      name: 'description',
-      title: 'Short Description',
-      type: 'text',
-      rows: 3,
-      description: 'Shown on hover and at top of project page',
-    },
-    {
       name: 'thumbnail',
       title: 'Thumbnail Image',
       type: 'image',
       options: {
         hotspot: true,
       },
-    },
-    {
-      name: 'projectTypes',
-      title: 'Project Types',
-      type: 'array',
-      of: [{ type: 'string' }],
-      options: {
-        layout: 'tags',
-      },
-      description: 'e.g., Brand Guide, Collateral, Digital, Print',
     },
     {
       name: 'images',
@@ -92,12 +96,7 @@ export default {
               name: 'caption',
               title: 'Caption',
               type: 'string',
-            },
-            {
-              name: 'fullWidth',
-              title: 'Full Width',
-              type: 'boolean',
-              initialValue: false,
+              description: 'Shows on hover over the image',
             },
           ],
         },
@@ -105,7 +104,7 @@ export default {
     },
     {
       name: 'content',
-      title: 'Project Description',
+      title: 'Additional Content',
       type: 'array',
       of: [
         {
@@ -130,23 +129,16 @@ export default {
       media: 'thumbnail',
     },
     prepare({ title, category, media }) {
-      const categoryLabels = {
+      const labels = {
         'brands': 'Brands',
         'collateral': 'Collateral',
         'the-rest': 'The Rest',
       };
       return {
         title,
-        subtitle: categoryLabels[category] || category,
+        subtitle: labels[category] || category,
         media,
       };
     },
   },
-  orderings: [
-    {
-      title: 'Category',
-      name: 'categoryAsc',
-      by: [{ field: 'category', direction: 'asc' }],
-    },
-  ],
 };

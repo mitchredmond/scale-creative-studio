@@ -1,4 +1,8 @@
 ---
+/**
+ * Project Card — With hover description popup (per George's wireframe note)
+ */
+
 import { urlFor } from '../lib/sanity';
 
 interface Props {
@@ -13,30 +17,25 @@ interface Props {
 const { title, slug, description, thumbnail, projectTypes = [], category } = Astro.props;
 
 const imageUrl = thumbnail?.asset
-  ? urlFor(thumbnail).width(800).height(600).format('webp').url()
+  ? urlFor(thumbnail).width(600).height(400).format('webp').url()
   : null;
 ---
 
 <a href={`/projects/${slug}`} class="project-card">
-  {imageUrl ? (
-    <img src={imageUrl} alt={title} class="project-card__image" loading="lazy" />
-  ) : (
-    <div class="project-card__image" style="background: var(--color-bg-alt);"></div>
-  )}
-  
-  <div class="project-card__overlay">
-    <div class="project-card__content">
-      <h3 class="project-card__title">{title}</h3>
-      {description && (
-        <p class="project-card__description">{description}</p>
-      )}
-      {projectTypes.length > 0 && (
-        <div class="project-card__types">
-          {projectTypes.map((type) => (
-            <span class="project-card__type">{type}</span>
-          ))}
-        </div>
-      )}
-    </div>
+  <div class="project-card__image-container">
+    {imageUrl ? (
+      <img src={imageUrl} alt={title} class="project-card__image" loading="lazy" />
+    ) : (
+      <div class="project-card__placeholder"></div>
+    )}
+    
+    <!-- Hover popup with description -->
+    {description && (
+      <div class="project-card__popup">
+        <p class="project-card__popup-text">{description}</p>
+      </div>
+    )}
   </div>
+  
+  <h3 class="project-card__title">{title}</h3>
 </a>

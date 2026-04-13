@@ -1,4 +1,8 @@
 ---
+/**
+ * Base Layout — Nav matches wireframe: Work | About | Contact
+ */
+
 import { getSettings } from '../lib/sanity';
 
 interface Props {
@@ -7,6 +11,7 @@ interface Props {
 
 const settings = await getSettings();
 const siteName = settings?.name || 'George Rivera';
+const email = settings?.email || '';
 const defaultTitle = `${siteName} — Creative Director`;
 
 const { title = defaultTitle } = Astro.props;
@@ -22,18 +27,18 @@ const { title = defaultTitle } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="/styles/global.css" />
-</head>
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  </head>
   <body>
+    <!-- Navigation — matches wireframe -->
     <nav class="nav">
-      <a href="/" class="nav__logo">{siteName}</a>
-      <ul class="nav__links">
-        <li><a href="/" class="nav__link">Work</a></li>
-        <li><a href="/about" class="nav__link">About</a></li>
-        {settings?.email && (
-          <li><a href={`mailto:${settings.email}`} class="nav__link">Contact</a></li>
-        )}
-      </ul>
+      <a href="/" class="nav__link">Work</a>
+      <a href="/about" class="nav__link">About</a>
+      {email ? (
+        <a href={`mailto:${email}`} class="nav__link">Contact</a>
+      ) : (
+        <a href="/about" class="nav__link">Contact</a>
+      )}
     </nav>
 
     <main>
@@ -41,27 +46,20 @@ const { title = defaultTitle } = Astro.props;
     </main>
 
     <footer class="footer">
-      <div class="container">
-        <div class="footer__content">
-          {settings?.email && (
-            <a href={`mailto:${settings.email}`} class="footer__email">
-              {settings.email}
-            </a>
-          )}
-          <p class="footer__copyright">
-            © {new Date().getFullYear()} {siteName}
-          </p>
-        </div>
-      </div>
+      <p>© {new Date().getFullYear()} {siteName}</p>
     </footer>
+
+    <script>
+      // Smooth hover interactions
+      document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          link.style.transition = 'opacity 0.2s ease';
+        });
+      });
+    </script>
   </body>
 </html>
 
 <style is:global>
-  @import '../styles/global.css';
+@import '../styles/global.css';
 </style>
-
-<script>
-  import { initAnimations } from '../scripts/animations.js';
-  initAnimations();
-</script>

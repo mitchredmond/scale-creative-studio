@@ -1,11 +1,16 @@
 ---
+/**
+ * Category Page — Matches George's wireframe
+ * Layout: Nav, tagline, category tabs, section title, project grid
+ */
+
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
-import { getProjectsByCategory } from '../../lib/sanity';
+import { getProjectsByCategory, getSettings } from '../../lib/sanity';
 
 export function getStaticPaths() {
   return [
-    { params: { slug: 'brands' }, props: { title: 'Brands', category: 'brands' } },
+    { params: { slug: 'brands' }, props: { title: 'Brand Work', category: 'brands' } },
     { params: { slug: 'collateral' }, props: { title: 'Collateral', category: 'collateral' } },
     { params: { slug: 'the-rest' }, props: { title: 'The Rest', category: 'the-rest' } },
   ];
@@ -14,7 +19,9 @@ export function getStaticPaths() {
 const { slug } = Astro.params;
 const { title, category } = Astro.props;
 
+const settings = await getSettings();
 const projects = await getProjectsByCategory(category) || [];
+const name = settings?.name || 'George Rivera';
 
 const categories = [
   { name: 'Brands', slug: 'brands' },
@@ -23,44 +30,47 @@ const categories = [
 ];
 ---
 
-<BaseLayout title={`${title} — George Rivera`}>
-  <div class="category-page">
-    <div class="container">
-      <header class="category-header">
-        <nav class="category-header__nav">
-          {categories.map((cat, i) => (
-            <>
-              <a 
-                href={`/category/${cat.slug}`} 
-                class:list={{ active: cat.slug === slug }}
-              >
-                {cat.name}
-              </a>
-              {i < categories.length - 1 && <span class="separator">|</span>}
-            </>
-          ))}
-        </nav>
-        <h1 class="category-header__title" data-animate>{title}</h1>
-      </header>
-
-      {projects.length > 0 ? (
-        <div class="project-grid" data-stagger>
-          {projects.map((project) => (
-            <ProjectCard
-              title={project.title}
-              slug={project.slug?.current || ''}
-              description={project.description}
-              thumbnail={project.thumbnail}
-              projectTypes={project.projectTypes || []}
-              category={project.category}
-            />
-          ))}
-        </div>
-      ) : (
-        <p style="color: var(--color-text-muted); padding: var(--space-lg) 0;">
-          No projects in this category yet.
-        </p>
-      )}
-    </div>
-  </div>
+<BaseLayout title={`${title} — ${name}`}>
+  <section class="category-page">
+    <!-- Tagline -->
+    <h1 class="category-page__tagline">
+      Building, Expanding,<br />and Fulfilling Brands
+    </h1>
+    
+    <!-- Category Tabs -->
+    <nav class="category-page__tabs">
+      {categories.map((cat, i) => (
+        <>
+          <a 
+            href={`/category/${cat.slug}`} 
+            class:list={['category-page__tab', { 'is-active': cat.slug === slug }]}
+          >
+            {cat.name.toUpperCase()}
+          </a>
+          {i < categories.length - 1 && <span class="category-page__separator">|</span>}
+        </>
+      ))}
+    </nav>
+    
+    <!-- Section Title -->
+    <h2 class="category-page__title">{title}</h2>
+    
+    <!-- Project Grid -->
+    {projects.length > 0 ? (
+      <div class="category-page__grid">
+        {projects.map((project) => (
+          <ProjectCard
+            title={project.title}
+            slug={project.slug?.current || ''}
+            description={project.description}
+            thumbnail={project.thumbnail}
+            projectTypes={project.projectTypes || []}
+            category={project.category}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="category-page__empty">No projects in this category yet.</p>
+    )}
+  </section>
 </BaseLayout>

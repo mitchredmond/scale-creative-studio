@@ -1,4 +1,8 @@
 ---
+/**
+ * About Page
+ */
+
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getSettings, urlFor } from '../lib/sanity';
 
@@ -11,44 +15,42 @@ const email = settings?.email || '';
 const socialLinks = settings?.socialLinks || [];
 
 const photoUrl = settings?.photo?.asset
-  ? urlFor(settings.photo).width(800).height(1067).format('webp').url()
+  ? urlFor(settings.photo).width(600).height(750).format('webp').url()
   : null;
 ---
 
 <BaseLayout title={`About — ${name}`}>
-  <div class="about-page">
-    <div class="container">
-      <div class="about-content">
-        <div class="about-photo" data-animate>
-          {photoUrl ? (
-            <img src={photoUrl} alt={name} />
-          ) : (
-            <div style="width: 100%; height: 100%; background: var(--color-bg-alt);"></div>
-          )}
-        </div>
+  <section class="about-page">
+    <div class="about-page__content">
+      <div class="about-page__photo">
+        {photoUrl ? (
+          <img src={photoUrl} alt={name} />
+        ) : (
+          <div class="about-page__photo-placeholder"></div>
+        )}
+      </div>
+      
+      <div class="about-page__text">
+        <p class="about-page__role">{role}</p>
+        <h1 class="about-page__name">{name}</h1>
+        <p class="about-page__bio">{bio}</p>
         
-        <div class="about-text">
-          <p class="about-text__label" data-animate>{role}</p>
-          <h1 class="about-text__name" data-animate>{name}</h1>
-          <p class="about-text__bio" data-animate>{bio}</p>
-          
-          <div class="about-text__links" data-stagger>
-            {email && (
-              <a href={`mailto:${email}`} class="about-text__link">Email</a>
-            )}
-            {socialLinks.map((link) => (
-              <a 
-                href={link.url} 
-                class="about-text__link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {link.platform}
-              </a>
-            ))}
-          </div>
+        <div class="about-page__links">
+          {email && (
+            <a href={`mailto:${email}`} class="about-page__link">Email</a>
+          )}
+          {socialLinks.map((link) => (
+            <a 
+              href={link.url} 
+              class="about-page__link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {link.platform}
+            </a>
+          ))}
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </BaseLayout>

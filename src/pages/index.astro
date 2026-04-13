@@ -1,4 +1,9 @@
 ---
+/**
+ * Homepage — Matches George's wireframe exactly
+ * Layout: Nav top, tagline center, name below, categories at bottom
+ */
+
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getSettings, getCategoryCounts } from '../lib/sanity';
 
@@ -15,18 +20,21 @@ const categories = [
 ---
 
 <BaseLayout>
-  <section class="hero">
-    <p class="hero__name" data-animate>{name}</p>
-    <h1 class="hero__tagline" data-animate>
+  <section class="home">
+    <h1 class="home__tagline">
       Building, Expanding,<br />and Fulfilling Brands
     </h1>
     
-    <nav class="category-nav" data-stagger>
-      {categories.map((cat) => (
-        <a href={`/category/${cat.slug}`} class="category-link">
-          {cat.name}
-          <span class="category-link__count">({cat.count})</span>
-        </a>
+    <p class="home__name">{name}</p>
+    
+    <nav class="home__categories">
+      {categories.map((cat, i) => (
+        <>
+          <a href={`/category/${cat.slug}`} class="home__category-link">
+            {cat.name.toUpperCase()}
+          </a>
+          {i < categories.length - 1 && <span class="home__separator">|</span>}
+        </>
       ))}
     </nav>
   </section>
